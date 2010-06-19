@@ -31,6 +31,9 @@ Create PDFs using plain old HTML+CSS. Uses [wkhtmltopdf](http://github.com/antia
     # Stylesheets can not be added when source is provided as a URL of File.
     kit = PDFKit.new('http://google.com')
     kit = PDFKit.new(File.new('/path/to/html'))
+
+    # Add headers or footers
+    PDFKit.new(..., :header_center => "Head center\nSecond line", :footer_left => "Foot L")
    
 ## Middleware
 
