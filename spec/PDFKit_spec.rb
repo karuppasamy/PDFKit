@@ -75,8 +75,24 @@ describe PDFKit do
       pdfkit = PDFKit.new(File.new(file_path))
       pdfkit.command.should match(/ #{file_path} -$/)
     end
+
+    [:header, :footer].each do |type|
+      context "with #{type}" do
+        let(:regexp){ %r{ --#{type}-html (/tmp/pdfkit[\d_]+\.html) } }
+        let(:pdfkit){ PDFKit.new('foo', type => 'bar') }
+
+        it "should add #{type} as file" do
+          pdfkit.command.should =~ regexp
+        end
+
+        it "should put the #{type} into a tempfile" do
+          tempfile = pdfkit.command.match(regexp)[1]
+          File.read(tempfile).should == 'bar'
+        end
+      end
+    end
   end
-  
+
   context "#to_pdf" do
     it "should generate a PDF of the HTML" do
       pdfkit = PDFKit.new('html', :page_size => 'Letter')

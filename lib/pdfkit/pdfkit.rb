@@ -66,7 +66,7 @@ class PDFKit
   protected
   
     def wkhtmltopdf
-      @wkhtmltopdf ||= `which wkhtmltopdf-proxy`.chomp
+      File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'bin', 'wkhtmltopdf-proxy'))
     end
   
     def style_tag_for(stylesheet)
@@ -89,10 +89,20 @@ class PDFKit
       normalized_options = {}
       options.each do |key, value|
         next if !value
+        if [:header, :footer].include? key.to_sym
+          key, value = convert_header_and_footer(key, value)
+        end
+
         normalized_key = "--#{normalize_arg key}"
         normalized_options[normalized_key] = normalize_value(value)
       end
       normalized_options
+    end
+
+    def convert_header_and_footer(key, value)
+      key = "#{key}-html"
+      value = TempfileWithExt.string_to_file(value, 'pdfkit.html')
+      [key, value]
     end
     
     def normalize_arg(arg)
