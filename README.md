@@ -32,9 +32,12 @@ Create PDFs using plain old HTML+CSS. Uses [wkhtmltopdf](http://github.com/antia
     kit = PDFKit.new('http://google.com')
     kit = PDFKit.new(File.new('/path/to/html'))
 
-    # Add headers or footers
+    # Add html footers/headers
+    PDFKit.new(..., :header => "<h1>I am in your head</h1>", :footer => "<h2>End</h2>")
+
+    # Add plaintext headers or footers
     PDFKit.new(..., :header_center => "Head center\nSecond line", :footer_left => "Foot L")
-   
+
 ## Middleware
 
 PDFKit comes with a middleware that allows users to visit any to get a PDF view of any page on your site by appending .pdf to the URL.
