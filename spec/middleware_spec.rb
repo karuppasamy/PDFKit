@@ -18,5 +18,12 @@ describe PDFKit::Middleware do
       body = @pdf.send :translate_paths, @body, @env
       body.should == "<link href=\"http://example.com/stylesheets/application.css\" media=\"screen\" rel=\"stylesheet\" type=\"text/css\" />"
     end
+    
+    it "should detect special pdfkit meta tags" do
+      @body = %{<html><head><meta name="pdfkit" content="http://www.example.com/header.html" data-option-name="header" /></head></html>}
+      body = @pdf.send :find_options_in_meta, @body
+      body.should have_key(:header)
+    end
+    
   end
 end
