@@ -101,7 +101,13 @@ class PDFKit
 
     def convert_header_and_footer(key, value)
       key = "#{key}-html"
-      value = TempfileWithExt.string_to_file(value, 'pdfkit.html')
+      source=Source.new(value)
+      if source.url?
+        value
+      else
+        value = TempfileWithExt.string_to_file(value, 'pdfkit.html')  
+      end
+      
       [key, value]
     end
     
