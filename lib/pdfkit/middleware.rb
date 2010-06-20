@@ -19,6 +19,17 @@ class PDFKit
         
         body = translate_paths(body, env)
         
+        header_url = body.match("<meta name=\"pdf_header\" content=\"(.*)\">") 
+        if header_url
+          @options.merge!(:header => header_url[1])
+        end
+
+        footer_url = body.match("<meta name=\"pdf_footer\" content=\"(.*)\">") 
+        if footer_url
+          @options.merge!(:footer => footer_url[1])
+        end
+
+        
         pdf = PDFKit.new(body, @options)
         body = pdf.to_pdf
         
